@@ -1,0 +1,1471 @@
+/* ============================================================== */
+/* === 1. VARIABLES, BASE Y TIPOGRAFÍA === */
+/* ============================================================== */
+:root {
+    --color-fondo: #0a0a0a;
+    --color-fondo-claro: #1a1a1a;
+    --color-dorado: #c5a448;
+    --color-dorado-hover: #e0be6c;
+    --color-texto-claro: #f0f0f0;
+    /* Se añade una variable para el color del pie de página sutil */
+    --color-dorado-suave: rgba(197, 164, 72, 0.3); 
+    --fuente-principal: 'Georgia', serif; 
+    --fuente-titulos: 'Times New Roman', serif; 
+}
+
+* {
+    box-sizing: border-box; 
+}
+/* Centrado total con el verde original corregido */
+.whatsapp-green-centered {
+    background: #25D366; 
+    color: white;
+    display: block;
+    text-align: center;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    margin: 15px auto; /* Centra el botón en su contenedor */
+    max-width: fit-content; /* El botón solo ocupa el espacio del texto */
+    font-weight: bold;
+    font-family: var(--fuente-principal); /* Coherencia tipográfica */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: filter 0.3s ease;
+}
+
+.whatsapp-green-centered:hover {
+    filter: brightness(1.1);
+}
+body {
+    background-color: var(--color-fondo);
+    color: var(--color-texto-claro);
+    font-family: var(--fuente-principal);
+    margin: 0;
+    padding-top: 80px;
+    line-height: 1.6; 
+    scroll-behavior: smooth; 
+}
+
+/* --- CLASES REUSABLES --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 5%;
+}
+
+.content-section {
+    padding: 80px 5%; 
+    min-height: 40vh;
+}
+
+.section-title {
+    font-family: var(--fuente-titulos);
+    color: var(--color-dorado);
+    font-size: 3em;
+    text-align: center;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: #b0b0b0;
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+/* --- ESTILOS DE BOTONES (CTA) --- */
+.cta-button, .btn-primary {
+    background: var(--color-dorado);
+    color: var(--color-fondo);
+    padding: 18px 40px;
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+    box-shadow: 0 4px 20px rgba(197, 164, 72, 0.7);
+    display: inline-block;
+}
+
+.cta-button:hover, .btn-primary:hover {
+    background: var(--color-dorado-hover);
+    transform: translateY(-2px);
+}
+
+
+/* ============================================================== */
+/* === 2. ANIMACIONES (FADE-IN) === */
+/* ============================================================== */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.fade-in.delay-1 { transition-delay: 0.2s; }
+.fade-in.delay-2 { transition-delay: 0.4s; }
+.fade-in.delay-3 { transition-delay: 0.6s; }
+
+
+/* ============================================================== */
+/* === 3. HEADER Y NAVEGACIÓN === */
+/* ============================================================== */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5%;
+    background: rgba(0, 0, 0, 0.95); 
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(197, 164, 72, 0.3);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 50px; 
+    margin-right: 15px;
+}
+
+.logo-text {
+    font-size: 1.2em;
+    color: var(--color-dorado);
+    letter-spacing: 3px;
+    margin: 0;
+}
+
+.nav-desktop {
+    display: flex;
+}
+
+.nav-desktop a {
+    text-decoration: none;
+    color: var(--color-texto-claro);
+    margin: 0 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+    padding-bottom: 5px;
+}
+
+.nav-desktop a:hover, .nav-desktop a.active {
+    color: var(--color-dorado);
+    border-bottom: 2px solid var(--color-dorado);
+}
+
+.menu-button {
+    display: none; 
+    background: none;
+    border: none;
+    color: var(--color-dorado);
+    font-size: 1.8em;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+/* ============================================================== */
+/* === 4. HERO SECTION (#inicio) - RUTA DE IMAGEN CORREGIDA === */
+/* ============================================================== */
+.hero-section {
+    height: 70vh; 
+    /* RUTA CORREGIDA: Salir de CSS/ y entrar a imagenes/ */
+    background-image: url('../imagenes/baile.jpeg'); 
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    text-align: center; 
+    position: relative;
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1));
+}
+
+.hero-content {
+    z-index: 10;
+    padding: 20px; 
+    max-width: 800px;
+}
+
+.hero-title {
+    font-family: var(--fuente-titulos);
+    font-size: 3.8em;
+    color: var(--color-dorado);
+    margin-bottom: 5px;
+    letter-spacing: 8px;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+    text-transform: uppercase;
+    line-height: 0.9; 
+}
+
+.hero-subtitle {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+    color: var(--color-texto-claro);
+}
+
+/* ============================================================== */
+/* === 5. MISIÓN/VISIÓN (#acerca) - TARJETAS DORADAS === */
+/* ============================================================== */
+
+.mission-vision-section {
+    background-color: var(--color-fondo-claro);
+    padding: 80px 5% 40px; 
+}
+
+.mision-vision-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 40px;
+    margin-top: 50px;
+    text-align: center; 
+}
+
+/* --- ESTILOS DE LA TARJETA (CARD) --- */
+.card {
+    background: #151515;
+    padding: 35px;
+    border-radius: 8px;
+    
+    /* Borde dorado completo */
+    border: 2px solid var(--color-dorado); 
+    
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s;
+    height: 100%;
+    text-align: center;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(197, 164, 72, 0.3);
+}
+
+.card h4 {
+    color: var(--color-dorado);
+    font-family: var(--fuente-titulos);
+    font-size: 1.8em;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.card p {
+    text-align: justify; 
+    padding: 0 10px; 
+}
+
+.card .icon {
+    font-size: 3em; 
+    color: var(--color-dorado);
+    display: block;
+    margin: 0 auto 10px auto; 
+}
+
+.content-section-cta {
+    background-color: var(--color-fondo); 
+    text-align: center;
+    padding: 40px 5%;
+}
+
+
+/* ============================================================== */
+/* === 6. SERVICIOS (#servicios) - TRES COLUMNAS Y DISEÑO ÚNICO === */
+/* ============================================================== */
+.services-section {
+    background-color: var(--color-fondo);
+    padding: 80px 5%; 
+}
+
+.services-grid {
+    display: grid;
+    /* Tres columnas iguales */
+    grid-template-columns: 1fr 1fr 1fr; 
+    gap: 40px; 
+    margin-top: 40px;
+    justify-content: center; 
+    align-items: stretch;
+}
+
+.service-card {
+    background: #151515;
+    padding: 30px 0; /* Padding vertical, no horizontal */
+    border-radius: 8px;
+    text-align: center;
+    
+    /* Borde dorado completo */
+    border: 2px solid var(--color-dorado); 
+    
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(197, 164, 72, 0.3);
+}
+
+.service-card h3 {
+    color: var(--color-dorado);
+    font-size: 1.6em;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0 20px;
+}
+
+.service-card img {
+    width: 100%;
+    height: 250px; 
+    object-fit: cover;
+    margin-bottom: 20px;
+    display: block; 
+}
+
+.service-card p {
+    font-size: 0.95em;
+    line-height: 1.6;
+    color: var(--color-texto-claro);
+    flex-grow: 1; 
+    padding: 0 20px; 
+}
+
+
+/* ============================================================== */
+/* === 7. GALERÍA (#galeria) - SOLUCIÓN DE CARRUSEL === */
+/* ============================================================== */
+.gallery-modern-section {
+    background-color: var(--color-fondo-claro);
+    text-align: center;
+    padding: 80px 5%;
+}
+
+.carousel-container {
+    position: relative;
+    width: 100%; 
+    max-width: 900px;
+    margin: 40px auto 30px;
+    border: 3px solid var(--color-dorado);
+    box-shadow: 0 0 25px rgba(197, 164, 72, 0.3);
+    overflow: hidden; 
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+    min-width: 100%; 
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.carousel-item img, 
+.carousel-item video {
+    width: 100%; 
+    max-width: 100%;
+    height: auto; 
+    max-height: 500px; 
+    display: block;
+    object-fit: contain; 
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: var(--color-dorado);
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 1.5em;
+    z-index: 5;
+    transition: background 0.3s;
+}
+
+.carousel-button.prev { left: 10px; }
+.carousel-button.next { right: 10px; }
+
+/* ============================================================== */
+/* === 8. TESTIMONIOS (#testimonios) - DISEÑO FINAL DE LUJO === */
+/* ============================================================== */
+.testimonials-section {
+    background-color: var(--color-fondo);
+    padding: 80px 5%; 
+}
+
+.testimonials-grid {
+    display: grid;
+    /* Permite más de dos tarjetas en una fila, si el ancho lo permite */
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); 
+    gap: 40px;
+    margin-top: 40px;
+    align-items: stretch; 
+    justify-content: center; 
+}
+
+.testimonial-card {
+    background: #1a1a1a;
+    padding: 30px;
+    
+    /* ESTILO DE TARJETA UNIFICADO: Borde Dorado Completo */
+    border: 2px solid var(--color-dorado); 
+    
+    border-radius: 4px;
+    font-style: italic;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    min-height: 150px; 
+    transition: transform 0.3s;
+    text-align: left; 
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(197, 164, 72, 0.3);
+}
+
+.testimonial-text {
+    text-align: justify;
+    margin-bottom: 20px;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+.testimonial-author {
+    display: block;
+    text-align: right;
+    margin-top: 15px; 
+    font-weight: bold;
+    color: var(--color-dorado);
+    font-style: normal;
+}
+
+/* ============================================================== */
+/* === 9. CONTACTO (#contacto) === */
+/* ============================================================== */
+.contact-section {
+    background-color: #151515;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 2fr 3fr; 
+    gap: 60px;
+    text-align: left;
+}
+
+.contact-info h2 {
+    color: var(--color-dorado);
+    font-size: 2.5em;
+    margin-top: 0;
+    font-family: var(--fuente-titulos);
+}
+
+.contact-info strong {
+    color: var(--color-dorado);
+    display: block; 
+    margin-top: 15px;
+}
+.contact-info p {
+    margin: 5px 0;
+}
+
+.contact-image {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 30px;
+    border-radius: 4px;
+    display: block;
+}
+
+/* --- Formulario --- */
+.contact-form h3 {
+    color: var(--color-dorado);
+    font-size: 1.8em;
+    margin-top: 0;
+    margin-bottom: 25px;
+    border-bottom: 2px solid rgba(197, 164, 72, 0.5);
+    padding-bottom: 5px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.contact-form label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--color-texto-claro);
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #242424;
+    border: 1px solid #444;
+    color: var(--color-texto-claro);
+    border-radius: 4px;
+    box-sizing: border-box; 
+}
+
+.contact-form .cta-button {
+    margin-top: 30px;
+}
+
+/* ============================================================== */
+/* === 10. FOOTER - DISEÑO PROFESIONAL === */
+/* ============================================================== */
+
+.footer {
+    background-color: var(--color-fondo);
+    color: var(--color-texto-claro);
+    padding: 60px 5% 20px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr; 
+    gap: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid var(--color-dorado-suave);
+}
+
+.footer h3 {
+    font-family: var(--fuente-titulos);
+    color: var(--color-dorado);
+    font-size: 1.4em;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.footer p {
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+/* --- Enlaces Rápidos --- */
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links a {
+    color: var(--color-texto-claro);
+    text-decoration: none;
+    display: block;
+    padding: 5px 0;
+    font-size: 0.9em;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--color-dorado);
+}
+
+/* --- Redes Sociales --- */
+.social-links a {
+    color: var(--color-dorado);
+    font-size: 1.8em;
+    margin-right: 15px;
+    transition: color 0.3s;
+}
+
+.social-links a:hover {
+    color: var(--color-texto-claro);
+}
+
+/* --- Sección Inferior (Copyright) --- */
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    font-size: 0.8em;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ============================================================== */
+/* === AJUSTE RESPONSIVE (Móviles y Tablets) === */
+/* ============================================================== */
+
+@media (max-width: 900px) {
+    /* Ajustes para tabletas y pantallas medianas */
+    .mision-vision-container,
+    .services-grid,
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    
+    /* --- HEADER / NAVEGACIÓN --- */
+    .nav-desktop {
+        display: none; 
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.98);
+        flex-direction: column;
+        text-align: center;
+        border-top: 1px solid var(--color-dorado);
+        padding: 10px 0;
+    }
+
+    .nav-desktop.open {
+        display: flex;
+    }
+
+    .nav-desktop a {
+        padding: 15px 0;
+        margin: 0;
+        border-bottom: 1px solid #1a1a1a;
+    }
+    
+    .menu-button {
+        display: block;
+    }
+    
+    /* --- HERO SECTION --- */
+    .hero-section {
+        height: 60vh;
+    }
+    
+    .hero-title {
+        font-size: 2.5em;
+        letter-spacing: 5px;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2em;
+    }
+    
+    .cta-button, .btn-primary {
+        padding: 15px 30px;
+        font-size: 0.9em;
+    }
+
+    /* --- TÍTULOS DE SECCIÓN --- */
+    .section-title {
+        font-size: 2em;
+        margin-bottom: 30px;
+        letter-spacing: 2px;
+    }
+
+    /* --- CONTACTO --- */
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .contact-info {
+        text-align: center;
+    }
+
+    .contact-info .contact-image {
+        margin: 30px auto 0;
+    }
+
+    /* --- FOOTER --- */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-links {
+        margin-bottom: 20px;
+    }.mission-vision-section {
+    background-color: var(--color-fondo-claro);
+    padding: 80px 5% 40px; 
+    
+    /* === AÑADIDO CLAVE: Eliminar cualquier posible margen superior remanente === */
+    margin-top: -1px; 
+}
+}
+/* ============================================================== */
+/* === 1. WIDGET DE CHAT: ESTRUCTURA PRINCIPAL === */
+/* ============================================================== */
+.chat-hint {
+    position: fixed;
+    bottom: 95px;
+    right: 25px;
+    background: var(--color-dorado);
+    color: black;
+    padding: 8px 15px;
+    border-radius: 20px 20px 5px 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 9999;
+    animation: fadeIn 0.5s;
+}
+/* Contenedor Flotante */
+#chat-widget {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+/* Ventana Principal del Chat */
+#chat-box {
+    background: #fff; 
+    border: 1px solid #ddd;
+    border-radius: 10px; 
+    width: 320px;
+    height: 480px;
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+    color: #333; /* Color de texto general dentro del chat */
+}
+
+/* Estado Cerrado */
+.chat-closed {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    pointer-events: none;
+}
+
+
+/* ============================================================== */
+/* === 2. PANTALLA DE BIENVENIDA (ESTILO CORTEMILITAR) === */
+/* ============================================================== */
+
+.chat-welcome-screen {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* RUTA DE IMAGEN: Usa una imagen de tu galería (ej: baile.jpeg o una foto de protocolo) */
+    background-image: url('../imagenes/fondo-chat.jpg'); 
+    background-size: cover;
+    background-position: center;
+    /* Superposición oscura para que el texto blanco destaque */
+    background-color: rgba(0, 0, 0, 0.4); 
+    background-blend-mode: multiply; 
+    z-index: 1;
+}
+
+.welcome-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+    color: #fff; 
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+    align-items: center;
+}
+
+.welcome-header-icons i {
+    font-size: 2em; 
+    color: var(--color-dorado); /* Ícono en dorado */
+    text-shadow: 0 0 5px rgba(0,0,0,0.8);
+}
+
+.welcome-content h1 {
+    font-size: 1.8em;
+    margin-top: 15px;
+    color: var(--color-dorado);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+/* Botón de Iniciar Chat (Estilo Dorado) */
+.start-chat-button {
+    background: var(--color-dorado);
+    color: var(--color-fondo);
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.3s ease;
+    width: 90%; 
+    max-width: 220px;
+    margin-top: auto; 
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.start-chat-button:hover {
+    background: var(--color-dorado-hover);
+}
+
+.start-chat-button span {
+    font-size: 0.75em;
+    font-weight: normal;
+    opacity: 0.9;
+}
+
+
+/* ============================================================== */
+/* === 3. ÁREA DE CONVERSACIÓN Y MENSAJES (EL CORE) === */
+/* ============================================================== */
+
+.chat-conversation-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-conversation-area.hidden {
+    display: none;
+}
+
+/* Header de Conversación (Dorado) */
+.chat-header {
+    background: var(--color-dorado);
+    color: var(--color-fondo);
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--fuente-titulos);
+}
+
+/* Cuerpo de la Conversación */
+#chat-body {
+    padding: 10px;
+    overflow-y: auto;
+    flex-grow: 1;
+    background: #f8f8f8; /* Fondo claro para los mensajes */
+}
+
+.message-group {
+    margin-bottom: 10px;
+    clear: both;
+}
+
+/* Estilos de Mensajes */
+.bot-message, .user-message {
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    border-radius: 15px; 
+    max-width: 85%;
+    font-size: 0.85em;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+    line-height: 1.4;
+}
+
+/* Mensajes del Bot (Fondo gris claro, Texto oscuro) */
+.bot-message {
+    background: #e0e0e0; 
+    color: #333 !important; /* CORRECCIÓN: Fuerza el color oscuro */
+    float: left;
+    clear: both;
+    border-bottom-left-radius: 3px; 
+}
+
+/* Mensajes del Usuario (Fondo verde suave, Texto oscuro) */
+.user-message {
+    background-color: #ffffff; 
+    color: #ffffff !important; /* CORRECCIÓN: Fuerza el color oscuro */
+    float: right;
+    clear: both;
+    border-bottom-right-radius: 3px; 
+}
+
+/* Estilo para la respuesta elegida (simulando mensaje del usuario) */
+.chat-body > p.bot-message[style*="text-align: right"] {
+    background-color: #d1e7dd; 
+    color: #212921 !important; /* CORRECCIÓN: Fuerza el color oscuro */
+    float: right;
+    clear: both;
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 15px; 
+}
+
+/* Opciones de Interacción (Botones) */
+.options-menu {
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+    clear: both;
+}
+
+.chat-option {
+    background: #f0f0f0; 
+    color: #4285F4; /* Azul para distinguirse del dorado */
+    border: 1px solid #ddd;
+    padding: 10px 12px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 18px; 
+    text-align: left;
+    transition: background 0.2s;
+    font-size: 0.85em;
+}
+
+.chat-option:hover {
+    background: #e0e0e0; 
+}
+
+/* Contact Box (para el número de WhatsApp) */
+.contact-box {
+    background: #fff8e1; /* Fondo suave para destacar el contacto */
+    border: 1px solid var(--color-dorado);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 10px;
+    text-align: center;
+}
+.contact-box a.cta-button {
+    background: #25d366; /* Color de WhatsApp */
+    color: #fff;
+    box-shadow: none;
+}
+.contact-box a.cta-button:hover {
+    background: #128c7e;
+}
+
+
+/* ============================================================== */
+/* === 4. FOOTER Y BOTONES DE CIERRE === */
+/* ============================================================== */
+
+/* Navegación del Footer (Inicio/Chat) */
+.chat-nav-footer {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid #e0e0e0;
+    padding: 8px 0;
+    background: #fff;
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 0.7em;
+    cursor: pointer;
+    padding: 3px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    transition: color 0.2s;
+}
+
+.nav-button:hover, .nav-button.active {
+    color: var(--color-dorado);
+}
+
+/* Powered By */
+.chat-powered-by {
+    font-size: 0.7em;
+    color: #bbb;
+    text-align: center;
+    padding: 4px;
+    background: #fff;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.chat-powered-by .powered-logo {
+    height: 12px;
+    vertical-align: middle;
+}
+
+/* Botones de Cierre */
+.close-btn, .welcome-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.3em;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    opacity: 0.8;
+}
+.close-btn { color: var(--color-fondo); } /* Negro en el header dorado */
+.welcome-close-btn { color: #fff; } /* Blanco en la pantalla de bienvenida */
+
+/* --- Ajuste Responsive --- */
+@media (max-width: 768px) {
+    #chat-widget {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    #chat-box {
+        width: calc(100% - 40px);
+        height: 70vh; 
+        bottom: 75px; 
+        right: 0;
+        left: 0; 
+        margin: auto;
+    }
+}
+.options-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+.chat-option {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.chat-option:hover {
+    filter: brightness(1.2);
+    transform: translateX(5px);
+}
+/* Estilo para el mensaje de redirección */
+.redirect-msg {
+    color: #25D366;
+    font-size: 0.85em;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+    font-style: italic;
+}
+/* Estilos para que las opciones se vean como botones militares */
+.options-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.chat-option {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.chat-option:hover {
+    filter: brightness(1.2);
+    transform: translateX(5px);
+}
+/* Variables de color para facilidad */
+:root {
+    --color-militar: #000000;
+    --color-dorado: #D4AF37;
+}
+
+/* 1. ESTILOS DEL BOTÓN FLOTANTE */
+#chat-open-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--color-militar); /* Color del chat */
+    color: white;
+    font-size: 1.5em;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+#chat-open-btn:hover {
+    transform: scale(1.05);
+}
+
+/* 2. ESTILOS DE LA VENTANA DEL CHAT */
+#chat-box {
+    position: fixed;
+    bottom: 90px; /* Sobre el botón flotante */
+    right: 20px;
+    width: 320px;
+    height: 400px; 
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 9998;
+    display: flex; 
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Clase para ocultar el chat (JS la añade/quita) */
+.chat-closed {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px) scale(0.95);
+}
+
+/* 3. HEADER Y CUERPO */
+.chat-header {
+    background-color: var(--color-militar);
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0; /* Evita que se encoja */
+}
+
+.chat-header h3 {
+    margin: 0;
+    font-size: 1.1em;
+}
+
+/* Botón 'X' dentro del Header */
+.chat-header .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+/* CUERPO DEL CHAT (CRUCIAL PARA EL SCROLL) */
+#chat-body {
+    flex-grow: 1; 
+    padding: 15px;
+    overflow-y: auto; 
+    background-color: #ffffff;
+}
+
+/* 4. ESTILOS DE MENSAJES Y OPCIONES */
+.message-group {
+    margin-bottom: 15px;
+}
+
+.bot-message {
+    background-color: #e5e5e5;
+    color: #0be421;
+    padding: 10px;
+    border-radius: 12px 12px 12px 3px;
+    max-width: 85%;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+}
+
+.user-message {
+    background-color: var(--color-militar); /* Fondo oscuro */
+    color: white;
+    padding: 10px;
+    border-radius: 12px 12px 3px 12px;
+    max-width: 85%;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+    /* Alineación del mensaje del usuario a la derecha */
+    margin-left: auto; 
+}
+
+/* Opciones del Menú */
+.options-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.chat-option {
+    padding: 10px 12px;
+    border: 1px solid var(--color-dorado);
+    background-color: #fff;
+    color: var(--color-militar);
+    cursor: pointer;
+    border-radius: 8px;
+    text-align: left;
+    transition: background-color 0.2s;
+    font-size: 0.9em;
+}
+
+.chat-option:hover {
+    background-color: var(--color-dorado);
+    color: white;
+}
+
+/* Pie de página de la ventana */
+.chat-powered-by {
+    text-align: center;
+    padding: 5px;
+    font-size: 0.7em;
+    color: #0be421;
+    border-top: 1px solid #eee;
+    flex-shrink: 0;
+}
+/* Animación de Pulso para el botón flotante */
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(36, 244, 75, 0.4); /* Color militar/verde*/
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(26, 237, 58, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(64, 64, 64, 0);
+    }
+}
+/* Asegura que el botón sea visible por defecto en el CSS */
+#chat-open-btn {
+    /* ... otros estilos ... */
+    display: flex; /* Ocultar/Mostrar solo lo maneja el JS */
+    /* ... otros estilos ... */
+}
+
+/* Estilo para indicar que el header es interactivo */
+.chat-header {
+    /* Asegúrate de que tienes ya los estilos de color, padding, etc. */
+    cursor: grab; /* Muestra el cursor de agarre */
+    user-select: none; /* Previene la selección de texto mientras se arrastra */
+}
+/* Botón de Menú (Oculto en Escritorio) */
+.menu-button {
+    display: none; 
+    /* El JS lo busca, pero el CSS lo mantiene invisible en desktop */
+}
+
+/* Navegación de Escritorio */
+.nav-desktop {
+    display: flex; 
+    /* Asegúrate de que los enlaces estén bien posicionados en desktop */
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    /* 1. MOSTRAR EL BOTÓN de menú en móviles */
+    .menu-button {
+        display: block; /* Hacemos visible el botón de hamburguesa */
+        font-size: 1.8rem; /* Tamaño para que sea fácil de tocar */
+        background: none;
+        border: none;
+        color: white; /* Ajusta este color al de tu header */
+        cursor: pointer;
+        z-index: 1000;
+        padding: 5px;
+    }
+
+    /* 2. OCULTAR EL MENÚ por defecto en móviles */
+    .nav-desktop {
+        position: absolute; /* Para que flote sobre el contenido */
+        top: 100%; /* Empieza justo debajo del header */
+        left: 0;
+        width: 100%;
+        max-height: 0; /* CLAVE para ocultar con animación */
+        overflow: hidden; /* Oculta el contenido que se sale del max-height */
+        
+        /* Estilos visuales del menú desplegado: */
+        background-color: var(--color-fondo); /* Usa un color oscuro de tu paleta */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        transition: max-height 0.3s ease-in-out; /* Animación de despliegue */
+        
+        /* Aseguramos que los enlaces se apilen verticalmente */
+        display: block; 
+    }
+
+    /* 3. MOSTRAR EL MENÚ cuando el JS añade la clase 'active' */
+    .nav-desktop.active {
+        max-height: 500px; /* Suficiente altura para mostrar todos los enlaces */
+        overflow: visible; /* Puede que necesites cambiar a visible si tienes elementos complejos */
+        padding: 10px 0;
+    }
+    
+    /* 4. Estilos de los enlaces dentro del menú desplegado */
+    .nav-desktop .nav-link {
+        display: block;
+        text-align: center;
+        padding: 15px 20px;
+        color: white;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+}
+
+/* estilos de fuera de conexion */
+#offline-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9); /* Fondo oscuro elegante */
+    z-index: 9999; /* Por encima de todo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    font-family: 'serif', sans-serif;
+}
+
+.offline-content {
+    border: 2px solid #c5a059; /* Un dorado militar */
+    padding: 40px;
+    background: #1a1a1a;
+    box-shadow: 0 0 20px rgba(197, 160, 89, 0.5);
+}
+
+.offline-content i {
+    font-size: 50px;
+    color: #c5a059;
+    margin-bottom: 20px;
+}
+
+.offline-content p {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.offline-content button {
+    background: #c5a059;
+    color: #000;
+    border: none;
+    padding: 10px 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.offline-content button:hover {
+    background: #fff;
+}
+
+/* Estilos del Preloader */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh; /* Usa vh para asegurar el alto total de la pantalla */
+    background-color: #0a0a0a; /* Fondo oscuro igual a tu --color-fondo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 300px;
+}
+
+.loader-logo {
+    width: 150px; /* Tamaño un poco más visible */
+    height: auto;
+    margin-bottom: 25px;
+    filter: drop-shadow(0 0 10px rgba(197, 164, 72, 0.2)); /* Brillo sutil dorado */
+    animation: breathe 2.5s ease-in-out infinite;
+}
+
+.loader-bar {
+    width: 100%;
+    height: 2px;
+    background: rgba(197, 164, 72, 0.1); /* Fondo de la barra en dorado muy suave */
+    margin-bottom: 15px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 2px;
+}
+
+.loader-bar::after {
+    content: '';
+    position: absolute;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--color-dorado); /* Usa tu variable de color */
+    animation: loading-bar 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.loader-content p {
+    color: var(--color-dorado);
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-family: var(--fuente-titulos);
+    margin: 0;
+}
+
+/* Clase para ocultar con suavidad */
+#preloader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Animaciones */
+@keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.08); opacity: 1; }
+}
+
+@keyframes loading-bar {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
