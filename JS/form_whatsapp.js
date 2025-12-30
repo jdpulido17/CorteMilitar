@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `Agradezco su pronta respuesta. 🫡`;
 
             // 3. Número de WhatsApp
-            const phoneNumber = '573209928037'; 
+            const phoneNumber = '573152510582'; 
 
             // 4. Redirección
             const encodedMessage = encodeURIComponent(whatsappMessage);

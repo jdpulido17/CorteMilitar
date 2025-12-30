@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function generateResponse(key) {
         if (key === 'escribir_asesor') {
-            window.open("https://wa.me/573209928037?text=Hola, necesito comunicarme con un asesor militar 🫡", "_blank");
+            window.open("https://wa.me/573152510582?text=Hola, necesito comunicarme con un asesor militar", "_blank");
             closeChat();
             return; 
         }
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     `¿Tienen disponibilidad? 🫡`
                 );
                 const btnWA = document.createElement('a');
-                btnWA.href = `https://api.whatsapp.com/send?phone=573209928037&text=${waMsg}`;
+                btnWA.href = `https://api.whatsapp.com/send?phone=573152510582&text=${waMsg}`;
                 btnWA.target = "_blank";
                 // Estilo centrado y profesional solicitado anteriormente
                 btnWA.style.cssText = "background:#25D366; color:white; display:block; text-align:center; padding:12px; border-radius:5px; text-decoration:none; margin:15px auto; font-weight:bold; max-width:90%;";
