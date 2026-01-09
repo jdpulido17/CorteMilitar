@@ -1,80 +1,147 @@
+// ======================================================
+// CARRUSEL DE IMÁGENES Y VIDEOS (AUTOMÁTICO + MANUAL)
+// ======================================================
+// Este script gestiona un carrusel horizontal que:
+// - Soporta imágenes y videos en los slides
+// - Avanza automáticamente
+// - Reproduce videos completos antes de avanzar
+// - Permite navegación manual (siguiente / anterior)
+// - Se adapta al redimensionamiento de pantalla
+// ======================================================
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Usamos querySelectorAll para obtener los ítems
+
+    // --------------------------------------------------
+    // 1. REFERENCIAS A ELEMENTOS DEL DOM
+    // --------------------------------------------------
+
+    // Todos los ítems (slides) del carrusel
     const items = document.querySelectorAll('.carousel-item'); 
+
+    // Contenedor que se desplaza horizontalmente
     const track = document.getElementById('carousel-track');
+
+    // Botones de navegación manual
     const nextBtn = document.getElementById('nextBtn');
     const prevBtn = document.getElementById('prevBtn');
     
-    // Salir si no estamos en una página con la galería
+    // Seguridad: salir si el carrusel no existe en la página
     if (!track || items.length === 0 || !prevBtn || !nextBtn) {
         return;
     }
 
+    // --------------------------------------------------
+    // 2. ESTADO GLOBAL DEL CARRUSEL
+    // --------------------------------------------------
+
+    // Índice del slide actual
     let currentIndex = 0;
     
-    // TIEMPO DE EXHIBICIÓN para imágenes estáticas (5 segundos)
+    // Tiempo de exhibición para imágenes (en milisegundos)
     const PHOTO_DISPLAY_TIME = 5000; 
+
+    // Temporizador para controlar el auto-avance de imágenes
     let photoTimer; 
 
-    // --- FUNCIÓN DE AVANCE AL SIGUIENTE SLIDE ---
+    // --------------------------------------------------
+    // 3. FUNCIÓN PARA AVANZAR AL SIGUIENTE SLIDE
+    // --------------------------------------------------
+    // Incrementa el índice y vuelve al inicio si llega al final
+
     const nextSlide = () => {
-        // La lógica de avance: si llega al final, vuelve a 0
         currentIndex = (currentIndex + 1) % items.length;
         updateCarousel();
     };
 
-    // --- FUNCIÓN PRINCIPAL DE ACTUALIZACIÓN ---
+    // --------------------------------------------------
+    // 4. FUNCIÓN PRINCIPAL DE ACTUALIZACIÓN DEL CARRUSEL
+    // --------------------------------------------------
+    // Se encarga de:
+    // - Mover el track
+    // - Detener temporizadores anteriores
+    // - Gestionar videos e imágenes
+    // - Controlar el auto-avance
+
     const updateCarousel = () => {
-        // 1. Limpieza inicial: Detener temporizador y videos anteriores
+
+        // Limpia cualquier temporizador activo
         clearTimeout(photoTimer);
         
-        // La variable itemWidth debe calcularse DENTRO de updateCarousel si se usa window.resize
+        // Calcula el ancho real del slide (importante para responsive)
         const itemWidth = items[0].clientWidth; 
+
+        // Calcula el desplazamiento horizontal
         const offset = -currentIndex * itemWidth;
+
+        // Aplica la transformación CSS
         track.style.transform = `translateX(${offset}px)`;
 
-        // Detener y resetear todos los videos, y remover listeners previos
+        // --------------------------------------------------
+        // Reinicia TODOS los videos del carrusel
+        // --------------------------------------------------
+        // Esto evita:
+        // - Videos reproduciéndose en segundo plano
+        // - Eventos duplicados
+
         items.forEach(item => {
             const video = item.querySelector('video');
             if (video) {
                 video.pause();
                 video.currentTime = 0;
-                // Remover listener para evitar que se ejecute más de una vez
-                video.removeEventListener('ended', nextSlide); 
+                video.removeEventListener('ended', nextSlide);
             }
         });
 
-        // 2. Manejo de contenido del Slide Actual
+        // --------------------------------------------------
+        // Manejo del contenido del slide actual
+        // --------------------------------------------------
+
         const currentItem = items[currentIndex];
         const currentVideo = currentItem.querySelector('video');
 
         if (currentVideo) {
-            // Caso VIDEO: Reproducir y escuchar el evento 'ended'
+            // Caso: SLIDE CON VIDEO
+            // - Reproduce el video
+            // - Avanza automáticamente al finalizar
             currentVideo.addEventListener('ended', nextSlide);
             currentVideo.play();
         } else {
-            // Caso IMAGEN: Establecer un temporizador para el avance
+            // Caso: SLIDE CON IMAGEN
+            // - Avanza después del tiempo definido
             photoTimer = setTimeout(nextSlide, PHOTO_DISPLAY_TIME);
         }
     };
     
-    // --- MANEJO DE EVENTOS (BOTONES) ---
-    // Avance manual con el botón "Siguiente"
+    // --------------------------------------------------
+    // 5. EVENTOS DE NAVEGACIÓN MANUAL
+    // --------------------------------------------------
+
+    // Botón "Siguiente"
     nextBtn.addEventListener('click', () => {
-        clearTimeout(photoTimer); // Detiene el auto-avance si el usuario interactúa
+        clearTimeout(photoTimer); // Detiene auto-avance por interacción
         nextSlide();
     });
     
-    // Retroceso manual con el botón "Anterior"
+    // Botón "Anterior"
     prevBtn.addEventListener('click', () => {
-        clearTimeout(photoTimer); // Detiene el auto-avance si el usuario interactúa
-        currentIndex = (currentIndex > 0) ? currentIndex - 1 : items.length - 1;
+        clearTimeout(photoTimer); // Detiene auto-avance por interacción
+        currentIndex = (currentIndex > 0)
+            ? currentIndex - 1
+            : items.length - 1; // Vuelve al último slide
         updateCarousel();
     });
 
-    // Ajuste por redimensionamiento
+    // --------------------------------------------------
+    // 6. AJUSTE RESPONSIVE
+    // --------------------------------------------------
+    // Recalcula posiciones si cambia el tamaño de la pantalla
+
     window.addEventListener('resize', updateCarousel); 
 
-    // Ejecuta al cargar para establecer la posición inicial
+    // --------------------------------------------------
+    // 7. INICIALIZACIÓN DEL CARRUSEL
+    // --------------------------------------------------
+
     updateCarousel(); 
+
 });

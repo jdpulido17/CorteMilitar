@@ -1,257 +1,342 @@
+/* =========================================================
+   CHATBOT DE PROTOCOLO MILITAR – CORTE MILITAR
+   ---------------------------------------------------------
+   Este script controla el comportamiento completo del
+   asistente virtual:
+   - Apertura y cierre del chat
+   - Navegación por menús
+   - Selección de eventos y servicios
+   - Agendamiento de fecha y hora
+   - Envío automático del resumen a WhatsApp
+   ---------------------------------------------------------
+   IMPORTANTE:
+   ❗ No modificar la lógica sin pruebas previas
+   ❗ Los estilos de fecha y hora son intencionales
+   ========================================================= */
+
 document.addEventListener('DOMContentLoaded', function() {
+
+    // ===============================
+    // REFERENCIAS AL DOM
+    // ===============================
     const chatBox = document.getElementById('chat-box');
     const chatOpenBtn = document.getElementById('chat-open-btn');
-    const chatCloseBtn = document.getElementById('chat-close-btn'); 
+    const chatCloseBtn = document.getElementById('chat-close-btn');
     const chatBody = document.getElementById('chat-body');
 
+    /* ==========================================
+       OBJETO DE ESTADO DEL USUARIO
+       ------------------------------------------
+       Guarda las selecciones realizadas por
+       el usuario durante la conversación.
+       Se usa para construir el mensaje final
+       de WhatsApp.
+       ========================================== */
     let seleccionUsuario = {
+        evento: "No especificado",
         servicio: "Consulta General",
         detalle: "Interés en protocolo militar"
     };
 
+    // Validación básica: si falta algún elemento crítico, se detiene el script
     if (!chatBox || !chatOpenBtn || !chatBody) return;
 
-    // --- MEJORA: NOTIFICACIÓN INICIAL (HINT) ---
-    setTimeout(() => {
-        if (chatBox.classList.contains('chat-closed')) {
-            const hint = document.createElement('div');
-            hint.className = 'chat-hint'; 
-            hint.style.cssText = "position:fixed; bottom:95px; right:25px; background:#c5a448; color:black; padding:10px 15px; border-radius:15px 15px 5px 15px; font-size:0.85rem; font-weight:bold; box-shadow:0 4px 15px rgba(0,0,0,0.3); z-index:9999; animation: fadeIn 0.5s;";
-            hint.innerText = "¡Hola! ¿Buscas un protocolo de gala? ⚔️";
-            document.body.appendChild(hint);
-            
-            chatOpenBtn.addEventListener('click', () => hint.remove());
-            setTimeout(() => { if(hint) hint.remove(); }, 8000);
-        }
-    }, 4000);
-
+    // ===============================
+    // FUNCIÓN: ABRIR CHAT
+    // ===============================
     function openChat() {
         chatBox.classList.remove('chat-closed');
-        chatOpenBtn.style.display = 'none'; 
-        chatBody.scrollTop = chatBody.scrollHeight; 
+        chatOpenBtn.style.display = 'none';
+        chatBody.scrollTop = chatBody.scrollHeight;
     }
 
+    // ===============================
+    // FUNCIÓN: CERRAR CHAT
+    // - Limpia el contenido
+    // - Reinicia el menú principal
+    // ===============================
     function closeChat() {
         chatBox.classList.add('chat-closed');
         chatOpenBtn.style.display = 'flex';
-        chatBody.innerHTML = ''; 
-        generateResponse('main_menu'); 
+        chatBody.innerHTML = '';
+        generateResponse('main_menu');
     }
 
+    /* ======================================================
+       ESTRUCTURA DE RESPUESTAS DEL BOT
+       ------------------------------------------------------
+       Cada clave representa un estado del chat.
+       message : texto que muestra el bot
+       options : botones interactivos
+       calendar: muestra selector de fecha/hora
+       contact : genera botón de envío a WhatsApp
+       ====================================================== */
     const responses = {
-        'main_menu': {
+
+        main_menu: {
             message: "👋 ¡Hola! Soy tu Asistente Militar. ¿En qué puedo ayudarte?",
             options: [
-                { text: "👤 Comunicarme con un Asesor", response: "escribir_asesor" },
+                { text: "🪖 Hablar con un Asesor Ahora", response: "escribir_asesor" },
                 { text: "💲 Precios y Cotizaciones", response: "precios" },
                 { text: "🎖️ Tipos de Servicio", response: "servicios" },
-                { text: "🗓️ Ver Disponibilidad", response: "agendar_cita" }
+                { text: "⏱️ Disponibilidad Inmediata", response: "agendar_cita" },
+                { text: "⭐ Servicios Más Solicitados", response: "servicios" }
             ]
         },
-        'precios': {
-            message: "💲 Los precios varían según el evento. ¿Qué estás organizando?",
+
+        precios: {
+            message: "💲 ¿Para qué tipo de evento deseas cotizar?",
             options: [
                 { text: "💍 Boda", response: "menu_bodas" },
                 { text: "👑 Quinceañera", response: "menu_xv" },
                 { text: "🔙 Menú Principal", response: "main_menu" }
             ]
         },
-        'menu_bodas': {
-            message: "👰🤵 **Protocolos para Bodas**: Seleccione el nivel de gala deseado:",
-            options: [
-                { text: "⚔️ Solo Cruce de Sables", response: "boda_sencilla" },
-                { text: "🎖️ Protocolo Imperial Completo", response: "boda_imperial" },
-                { text: "🔙 Volver", response: "precios" }
-            ]
-        },
-        'boda_sencilla': {
-            message: "Has elegido **Cruce de Sables**. Incluye 6 elementos con uniforme de gala. ¿Deseas verificar fecha?",
-            options: [
-                { text: "🗓️ Ver Disponibilidad", response: "agendar_cita" },
-                { text: "🔙 Volver", response: "menu_bodas" }
-            ]
-        },
-        'boda_imperial': {
-            message: "Has elegido **Protocolo Imperial**. Incluye Calle de Honor, Brindis y Escolta. ¿Consultamos fecha?",
-            options: [
-                { text: "🗓️ Ver Disponibilidad", response: "agendar_cita" },
-                { text: "🔙 Volver", response: "menu_bodas" }
-            ]
-        },
-        'menu_xv': {
-            message: "🎉**Protocolos para XV Años**: Seleccione el paquete de honor:",
-            options: [
-                { text: "💂 Escolta de Caballeros", response: "xv_escolta" },
-                { text: "🎭 Vals Militar Coreografiado", response: "xv_vals" },
-                { text: "🔙 Volver", response: "precios" }
-            ]
-        },
-        'xv_escolta': {
-            message: "La **Escolta de Caballeros** acompaña a la quinceañera en su entrada triunfal. ¿Verificamos fecha?",
-            options: [
-                { text: "🗓️ Ver Disponibilidad", response: "agendar_cita" },
-                { text: "🔙 Volver", response: "menu_xv" }
-            ]
-        },
-        'xv_vals': {
-            message: "El **Vals Militar** es una coreografía de alta disciplina y elegancia. ¿Verificamos disponibilidad?",
-            options: [
-                { text: "🗓️ Ver Disponibilidad", response: "agendar_cita" },
-                { text: "🔙 Volver", response: "menu_xv" }
-            ]
-        },
-        'servicios': {
-            message: "💂‍♂️ Ofrecemos protocolos de élite. ¿Cuál te interesa conocer?",
+
+        menu_bodas: {
+            message: "💍 **Servicios para Bodas Militares**",
             options: [
                 { text: "⚔️ Cruce de Sables", response: "info_sables" },
+                { text: "🏅 Calle de Honor", response: "info_calle_honor" },
+                { text: "🎼 Vals Militar", response: "info_vals" },
+                { text: "🔙 Precios y Cotizaciones", response: "precios" }
+            ]
+        },
+
+        menu_xv: {
+            message: "👑 **Servicios para Quinceañeras Militares**",
+            options: [
+                { text: "⚔️ Cruce de Sables", response: "info_sables" },
+                { text: "🏅 Calle de Honor", response: "info_calle_honor" },
+                { text: "🎼 Vals Militar", response: "info_vals" },
+                { text: "🔙 Precios y Cotizaciones", response: "precios" }
+            ]
+        },
+
+        servicios: {
+            message: "🎖️ **Nuestros Servicios de Protocolo Militar**",
+            options: [
+                { text: "⚔️ Cruce de Sables", response: "info_sables" },
+                { text: "🏅 Calle de Honor", response: "info_calle_honor" },
+                { text: "💂‍♂️ Escolta Militar", response: "info_escolta" },
+                { text: "🛡️ Guardia de Honor", response: "info_guardia" },
+                { text: "🎼 Vals Militar", response: "info_vals" },
+                { text: "⚰️ Protocolo Fúnebre", response: "info_funebre" },
                 { text: "🔙 Menú Principal", response: "main_menu" }
             ]
         },
-        'info_sables': {
-            message: "🌟 El **Cruce de Sables** es nuestro servicio más solicitado. ¿Deseas ver disponibilidad?",
+
+        /* ======================================================
+           BLOQUES DE INFORMACIÓN DE SERVICIOS
+           ------------------------------------------------------
+           Cada uno permite consultar disponibilidad
+           ====================================================== */
+        info_sables: {
+            message: "⚔️ El **Cruce de Sables** simboliza honor y respeto.",
             options: [
                 { text: "🗓️ Consultar Fecha", response: "agendar_cita" },
-                { text: "🔙 Menú Principal", response: "main_menu" }
+                { text: "🔙 Tipos de Servicio", response: "servicios" }
             ]
         },
-        'agendar_cita': {
-            message: "🗓️ **Protocolo de Disponibilidad**: Indique la fecha y la hora del evento para verificar nuestro despliegue:",
+
+        info_calle_honor: {
+            message: "🏅 La **Calle de Honor** es una formación ceremonial solemne.",
+            options: [
+                { text: "🗓️ Consultar Fecha", response: "agendar_cita" },
+                { text: "🔙 Tipos de Servicio", response: "servicios" }
+            ]
+        },
+
+        info_escolta: {
+            message: "💂‍♂️ La **Escolta Militar** acompaña actos protocolarios.",
+            options: [
+                { text: "🗓️ Consultar Fecha", response: "agendar_cita" },
+                { text: "🔙 Tipos de Servicio", response: "servicios" }
+            ]
+        },
+
+        info_guardia: {
+            message: "🛡️ La **Guardia de Honor** representa solemnidad.",
+            options: [
+                { text: "🗓️ Consultar Fecha", response: "agendar_cita" },
+                { text: "🔙 Tipos de Servicio", response: "servicios" }
+            ]
+        },
+
+        info_vals: {
+            message: "🎼 El **Vals Militar** combina disciplina y elegancia.",
+            options: [
+                { text: "🗓️ Consultar Fecha", response: "agendar_cita" },
+                { text: "🔙 Tipos de Servicio", response: "servicios" }
+            ]
+        },
+
+        info_funebre: {
+            message: "⚰️ Protocolo Fúnebre Militar.",
+            options: [
+                { text: "🗓️ Consultar Fecha", response: "agendar_cita" },
+                { text: "🔙 Tipos de Servicio", response: "servicios" }
+            ]
+        },
+
+        // Selector de fecha y hora
+        agendar_cita: {
+            message: "🗓️ **Protocolo de Disponibilidad**: Indique fecha y hora:",
             calendar: true
         },
-        'confirmar_envio': {
-            message: "✅ **Resumen de Solicitud Listo**. Presiona el botón para enviar todos los detalles al administrador.",
+
+        // Confirmación y envío a WhatsApp
+        confirmar_envio: {
+            message: "✅ **Resumen de Solicitud Listo**👇🏻.",
             contact: true
         }
     };
 
+    /* ======================================================
+       FUNCIÓN PRINCIPAL DEL BOT
+       ------------------------------------------------------
+       Genera respuestas, botones, calendario y WhatsApp
+       ====================================================== */
     function generateResponse(key) {
+
+        // Redirección directa a asesor humano
         if (key === 'escribir_asesor') {
-            const msjAsesor = "Hola, necesito comunicarme con un asesor militar 🫡";
-            const url = "https://api.whatsapp.com/send?phone=573152510582&text=" + encodeURIComponent(msjAsesor);
-            window.open(url, "_blank");
+            window.open(
+                "https://api.whatsapp.com/send?phone=573152510582&text=" +
+                encodeURIComponent("Hola, necesito comunicarme con un asesor militar 🫡"),
+                "_blank"
+            );
             closeChat();
-            return; 
+            return;
         }
 
         const data = responses[key];
         if (!data) return;
 
-        const typingId = 'typing-' + Math.random().toString(36).substr(2, 9);
-        const typingIndicator = document.createElement('div');
-        typingIndicator.id = typingId;
-        typingIndicator.classList.add('bot-message');
-        typingIndicator.innerHTML = "<i>Escribiendo...</i>";
-        chatBody.appendChild(typingIndicator);
+        // Indicador visual de "Escribiendo..."
+        const typing = document.createElement('p');
+        typing.className = 'bot-message';
+        typing.innerHTML = "<i>Escribiendo...</i>";
+        chatBody.appendChild(typing);
         chatBody.scrollTop = chatBody.scrollHeight;
 
         setTimeout(() => {
-            const indicator = document.getElementById(typingId);
-            if(indicator) indicator.remove();
 
-            const messageGroup = document.createElement('div');
-            messageGroup.classList.add('message-group');
+            typing.remove();
 
+            const group = document.createElement('div');
+            group.className = 'message-group';
+
+            // Mensaje del bot
             const botMsg = document.createElement('p');
-            botMsg.classList.add('bot-message');
+            botMsg.className = 'bot-message';
             botMsg.innerHTML = data.message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            messageGroup.appendChild(botMsg);
+            group.appendChild(botMsg);
 
+            /* ===============================
+               CALENDARIO DE FECHA Y HORA
+               =============================== */
             if (data.calendar) {
                 const tomorrow = new Date();
                 tomorrow.setDate(tomorrow.getDate() + 1);
                 const minDate = tomorrow.toISOString().split('T')[0];
 
                 const calendarBox = document.createElement('div');
-                calendarBox.style.cssText = "background:#1a1a1a; padding:12px; border-radius:8px; border:1px solid #c5a448; margin-top:10px;";
+                calendarBox.style.cssText =
+                    "background:#1a1a1a; padding:12px; border-radius:8px; border:1px solid #c5a448; margin-top:10px;";
                 calendarBox.innerHTML = `
-                    <label style="color:#c5a448; font-size:0.75rem; display:block; margin-bottom:5px;">Fecha:</label>
+                    <label style="color:#c5a448; font-size:0.75rem;">Fecha:</label>
                     <input type="date" id="chat-date" min="${minDate}" style="width:100%; margin-bottom:8px; padding:5px; background:#000; color:#fff; border:1px solid #444;">
-                    <label style="color:#c5a448; font-size:0.75rem; display:block; margin-bottom:5px;">Hora:</label>
+                    <label style="color:#c5a448; font-size:0.75rem;">Hora:</label>
                     <input type="time" id="chat-time" style="width:100%; margin-bottom:12px; padding:5px; background:#000; color:#fff; border:1px solid #444;">
-                    <button class="chat-option" id="btn-validar-fecha" style="background:#c5a448; color:black; width:100%; border:none; padding:10px; font-weight:bold; cursor:pointer;">CONFIRMAR DATOS</button>
+                    <button class="chat-option" id="btn-validar-fecha"
+                        style="background:#c5a448; color:black; width:100%; border:none; padding:10px; font-weight:bold;">
+                        CONFIRMAR DATOS
+                    </button>
                 `;
-                messageGroup.appendChild(calendarBox);
+                group.appendChild(calendarBox);
             }
 
+            /* ===============================
+               ENVÍO A WHATSAPP
+               =============================== */
             if (data.contact) {
-                const fecha = document.getElementById('chat-date')?.value || "No seleccionada";
-                const hora = document.getElementById('chat-time')?.value || "No seleccionada";
-
                 const waMsg = encodeURIComponent(
                     `¡Hola! 👋 Vengo de su sitio web Corte Militar.\n\n` +
-                    `🎖️SOLICITUD DE SERVICIO\n` +
-                    `📌 Servicio: ${seleccionUsuario.servicio}\n` +
-                    `ℹ️ Paquete: ${seleccionUsuario.detalle}\n` +
-                    `📅 Fecha: ${fecha}\n` +
-                    `⏰ Hora:  ${hora}\n\n` +
+                    `🎉 Evento: ${seleccionUsuario.evento}\n` +
+                    `🎖️ Servicio: ${seleccionUsuario.servicio}\n` +
+                    `📌 Detalle: ${seleccionUsuario.detalle}\n` +
+                    `📅 Fecha: ${document.getElementById('chat-date')?.value}\n` +
+                    `⏰ Hora: ${document.getElementById('chat-time')?.value}\n\n` +
                     `¿Tienen disponibilidad? 🫡`
                 );
 
-                const btnWA = document.createElement('a');
-                btnWA.href = `https://api.whatsapp.com/send?phone=573152510582&text=${waMsg}`;
-                btnWA.target = "_blank";
-                btnWA.style.cssText = "background:#25D366; color:white; display:block; text-align:center; padding:12px; border-radius:5px; text-decoration:none; margin:15px auto; font-weight:bold; max-width:90%;";
-                btnWA.textContent = "🟢 ENVIAR POR WHATSAPP";
-                messageGroup.appendChild(btnWA);
+                const btn = document.createElement('a');
+                btn.href = `https://api.whatsapp.com/send?phone=573152510582&text=${waMsg}`;
+                btn.target = "_blank";
+                btn.textContent = "🟢 ENVIAR POR WHATSAPP";
+                btn.style.cssText =
+                    "background:#25D366; color:white; display:block; text-align:center; padding:12px; border-radius:5px; text-decoration:none; margin:15px auto; font-weight:bold;";
+
+                // Cierra el chat automáticamente después de enviar
+                btn.addEventListener('click', () => {
+                    setTimeout(() => closeChat(), 300);
+                });
+
+                group.appendChild(btn);
             }
 
+            // Botones de navegación
             if (data.options) {
-                const menu = document.createElement('div');
-                menu.classList.add('options-menu');
                 data.options.forEach(opt => {
                     const btn = document.createElement('button');
-                    btn.classList.add('chat-option');
+                    btn.className = 'chat-option';
                     btn.textContent = opt.text;
                     btn.dataset.response = opt.response;
-                    menu.appendChild(btn);
+                    group.appendChild(btn);
                 });
-                messageGroup.appendChild(menu);
             }
 
-            chatBody.appendChild(messageGroup);
+            chatBody.appendChild(group);
             chatBody.scrollTop = chatBody.scrollHeight;
-        }, 1000); 
+
+        }, 900);
     }
 
-    chatBody.addEventListener('click', function(event) {
-        if (event.target.id === 'btn-validar-fecha') {
-            const date = document.getElementById('chat-date').value;
-            const time = document.getElementById('chat-time').value;
+    /* ======================================================
+       EVENTOS DE INTERACCIÓN DEL USUARIO
+       ====================================================== */
+    chatBody.addEventListener('click', function(e) {
 
-            if (!date) return alert("Por favor, seleccione una fecha.");
-            if (!time) return alert("Por favor, seleccione una hora.");
-            
-            const userMsg = document.createElement('p');
-            userMsg.classList.add('user-message');
-            userMsg.textContent = `Fecha: ${date} - Hora: ${time}`;
-            chatBody.appendChild(userMsg);
-            
+        // Confirmación de fecha y hora
+        if (e.target.id === 'btn-validar-fecha') {
             generateResponse('confirmar_envio');
+            return;
         }
 
-        if (event.target.classList.contains('chat-option') && !event.target.id) {
-            const responseKey = event.target.dataset.response;
-            const textChosen = event.target.textContent;
+        if (!e.target.classList.contains('chat-option')) return;
 
-            const userMsg = document.createElement('p');
-            userMsg.classList.add('user-message');
-            userMsg.textContent = textChosen;
-            chatBody.appendChild(userMsg);
+        const key = e.target.dataset.response;
+        const text = e.target.textContent;
 
-            if (responseKey.includes('boda') && responseKey !== 'menu_bodas') {
-                seleccionUsuario.servicio = "Boda Militar";
-                seleccionUsuario.detalle = textChosen;
-            } else if (responseKey.includes('xv') && responseKey !== 'menu_xv') {
-                seleccionUsuario.servicio = "Quinceañera Militar";
-                seleccionUsuario.detalle = textChosen;
-            }
+        // Asignación del tipo de evento
+        if (key === 'menu_bodas') seleccionUsuario.evento = "Boda";
+        if (key === 'menu_xv') seleccionUsuario.evento = "Quinceañera";
+        if (key === 'servicios') seleccionUsuario.evento = "No especificado";
 
-            generateResponse(responseKey);
+        // Asignación del servicio seleccionado
+        if (key.startsWith('info_')) {
+            seleccionUsuario.servicio = text;
+            seleccionUsuario.detalle = text;
         }
+
+        generateResponse(key);
     });
 
+    // Eventos de apertura y cierre del chat
     chatOpenBtn.addEventListener('click', openChat);
     if (chatCloseBtn) chatCloseBtn.addEventListener('click', closeChat);
 
+    // Inicio automático del bot
     generateResponse('main_menu');
 });
