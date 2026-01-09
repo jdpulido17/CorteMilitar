@@ -48,14 +48,16 @@
             <button class="menu-button" id="menu-btn">☰</button>
 
             <!-- Menú de navegación principal -->
+            <!-- Menú de navegación principal -->
             <nav class="nav-desktop" id="nav-menu">
-                <a href="#inicio" class="nav-link">Inicio</a>
-                <a href="#acerca" class="nav-link">Visión & Misión</a>
-                <a href="#servicios" class="nav-link">Servicios</a>
-                <a href="#galeria" class="nav-link">Galería</a>
-                <a href="#testimonios" class="nav-link">Testimonios</a>
-                <a href="#contacto" class="nav-link">Contacto</a>
+                <a href="javascript:void(0)" class="nav-link" data-target="inicio">Inicio</a>
+                <a href="javascript:void(0)" class="nav-link" data-target="acerca">Visión & Misión</a>
+                <a href="javascript:void(0)" class="nav-link" data-target="servicios">Servicios</a>
+                <a href="javascript:void(0)" class="nav-link" data-target="galeria">Galería</a>
+                <a href="javascript:void(0)" class="nav-link" data-target="testimonios">Testimonios</a>
+                <a href="javascript:void(0)" class="nav-link" data-target="contacto">Contacto</a>
             </nav>
+
         </div>
     </header>
 
@@ -401,6 +403,17 @@
     <script>
         /* Inserta automáticamente el año actual en el footer */
         document.getElementById('year').textContent = new Date().getFullYear();
+        // Scroll suave para todos los enlaces del menú
+    const menuLinks = document.querySelectorAll('.nav-link');
+    menuLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const targetSection = document.getElementById(targetId);
+            if(targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
     </script>
 
     <script src="JS/efectos.js"></script> 
